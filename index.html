@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sweet Wonders — Apple Store Style Pastel Candy Shop</title>
-  <!-- Google Fonts: Inter & SF-Pro like clean typography + Fredoka for headers -->
+  <title>Sweet Wonders — Modern Pastel Candy Store</title>
+  <!-- Google Fonts: Inter for Apple UI + Fredoka for headers -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,17 +34,9 @@
     }
   </script>
   <style>
-    body {
-      background-color: #FAFAFA;
-      color: #1D1D1F;
-    }
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .hide-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    body { background-color: #FAFAFA; color: #1D1D1F; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .apple-card-shadow {
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
       transition: all 0.3s cubic-bezier(0,0,0.2,1);
@@ -53,240 +45,436 @@
       transform: scale(1.015);
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
     }
+    .nav-tab.active {
+      color: #1D1D1F;
+      border-bottom: 2px solid #FFC0CB;
+      font-weight: 700;
+    }
+    .page-section { display: none; }
+    .page-section.active { display: block; }
   </style>
 </head>
-<body class="font-sans antialiased text-pastel-dark">
+<body class="font-sans antialiased text-pastel-dark min-h-screen flex flex-col justify-between">
 
-  <!-- Top Apple-Style Notification Bar -->
+  <!-- Top Apple-Style Announcement Bar -->
   <div class="bg-pastel-pink/30 text-pastel-dark font-normal text-xs py-2.5 text-center px-4 border-b border-pastel-pink/20">
-    Get free delivery on all orders over $35. <a href="#" class="text-blue-600 hover:underline font-medium">Shop online with fast delivery →</a>
+     Free delivery on all orders over $35. <a href="javascript:void(0)" onclick="switchTab('mix')" class="text-blue-600 hover:underline font-medium">Build your custom candy bag →</a>
   </div>
 
-  <!-- Minimal Apple-Style Navigation Bar -->
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between text-xs tracking-tight">
-      <a href="#" class="font-fredoka font-bold text-lg text-pastel-dark flex items-center gap-1.5">
-        <span class="text-xl">🍭</span> Sweet Wonders
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between text-xs">
+      <a href="javascript:void(0)" onclick="switchTab('store')" class="font-fredoka font-bold text-xl text-pastel-dark flex items-center gap-1.5">
+        <span class="text-2xl">🍭</span> Sweet Wonders
       </a>
-      <nav class="hidden md:flex items-center space-x-8 text-gray-600 font-medium">
-        <a href="#store" class="hover:text-black transition">Store</a>
-        <a href="#gummies" class="hover:text-black transition">Gummies</a>
-        <a href="#chocolates" class="hover:text-black transition">Chocolates</a>
-        <a href="#sours" class="hover:text-black transition">Sours</a>
-        <a href="#mix" class="hover:text-black transition">Mix & Match</a>
-        <a href="#gifts" class="hover:text-black transition">Gifting</a>
+      
+      <!-- Multi-Page Navigation Tabs -->
+      <nav class="hidden md:flex items-center space-x-6 text-gray-500 font-medium h-full">
+        <button onclick="switchTab('store')" id="tab-store" class="nav-tab active h-full px-1 flex items-center transition">Store</button>
+        <button onclick="switchTab('gummies')" id="tab-gummies" class="nav-tab h-full px-1 flex items-center transition">Gummies</button>
+        <button onclick="switchTab('chocolates')" id="tab-chocolates" class="nav-tab h-full px-1 flex items-center transition">Chocolates</button>
+        <button onclick="switchTab('sours')" id="tab-sours" class="nav-tab h-full px-1 flex items-center transition">Sours</button>
+        <button onclick="switchTab('mix')" id="tab-mix" class="nav-tab h-full px-1 flex items-center transition">Mix & Match</button>
+        <button onclick="switchTab('gifting')" id="tab-gifting" class="nav-tab h-full px-1 flex items-center transition">Gifting</button>
       </nav>
+
       <div class="flex items-center gap-4 text-gray-600">
         <button class="hover:text-black">🔍</button>
-        <button class="hover:text-black relative">
-          🛍️ <span class="absolute -top-1 -right-2 bg-pastel-pink text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
+        <button class="hover:text-black relative flex items-center gap-1 bg-pastel-cream border border-gray-200 px-3 py-1.5 rounded-full font-medium">
+          🛍️ Cart <span id="cart-count" class="bg-pastel-pink text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Store Layout -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 flex-grow w-full">
 
-    <!-- Store Header / Sub-navigation -->
-    <section class="mb-10">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 class="font-fredoka font-bold text-4xl sm:text-5xl text-pastel-dark tracking-tight">
-            Store. <span class="text-pastel-subtle">The best way to buy the sweets you love.</span>
-          </h1>
-        </div>
-        <div class="flex items-center gap-3 text-xs font-medium">
-          <div class="flex -space-x-2">
-            <span class="w-8 h-8 rounded-full bg-pastel-pink border-2 border-white flex items-center justify-center">🍬</span>
-            <span class="w-8 h-8 rounded-full bg-pastel-mint border-2 border-white flex items-center justify-center">🍭</span>
-          </div>
+    <!-- ================================================= -->
+    <!-- 1. STORE (HOME) PAGE VIEW                         -->
+    <!-- ================================================= -->
+    <div id="page-store" class="page-section active">
+      <section class="mb-10">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <p class="text-pastel-dark font-semibold">Need shopping help?</p>
-            <a href="#" class="text-blue-600 hover:underline">Ask a Sweet Specialist →</a>
+            <h1 class="font-fredoka font-bold text-4xl sm:text-5xl text-pastel-dark tracking-tight">
+              Store. <span class="text-pastel-subtle">The best way to buy the sweets you love.</span>
+            </h1>
           </div>
-        </div>
-      </div>
-
-      <!-- Category Icon Carousel (Apple Store Category Bar Style) -->
-      <div class="flex items-center gap-8 overflow-x-auto hide-scrollbar py-4 border-b border-gray-200/60">
-        <a href="#" class="flex flex-col items-center min-w-[70px] text-center group">
-          <div class="w-14 h-14 rounded-full bg-pastel-pink/30 group-hover:bg-pastel-pink/50 flex items-center justify-center text-2xl transition mb-2">🍬</div>
-          <span class="text-xs font-medium text-pastel-dark">Gummies</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[70px] text-center group">
-          <div class="w-14 h-14 rounded-full bg-pastel-mint/30 group-hover:bg-pastel-mint/50 flex items-center justify-center text-2xl transition mb-2">🍫</div>
-          <span class="text-xs font-medium text-pastel-dark">Chocolates</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[70px] text-center group">
-          <div class="w-14 h-14 rounded-full bg-pastel-blue/30 group-hover:bg-pastel-blue/50 flex items-center justify-center text-2xl transition mb-2">🍋</div>
-          <span class="text-xs font-medium text-pastel-dark">Sours</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[70px] text-center group">
-          <div class="w-14 h-14 rounded-full bg-pastel-lilac/50 group-hover:bg-pastel-lilac flex items-center justify-center text-2xl transition mb-2">🎁</div>
-          <span class="text-xs font-medium text-pastel-dark">Gift Sets</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[70px] text-center group">
-          <div class="w-14 h-14 rounded-full bg-amber-100 group-hover:bg-amber-200 flex items-center justify-center text-2xl transition mb-2">🌿</div>
-          <span class="text-xs font-medium text-pastel-dark">Vegan</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[70px] text-center group">
-          <div class="w-14 h-14 rounded-full bg-rose-100 group-hover:bg-rose-200 flex items-center justify-center text-2xl transition mb-2">📦</div>
-          <span class="text-xs font-medium text-pastel-dark">Mix Box</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- Horizontal Showcase Section 1: "The Latest" -->
-    <section class="mb-16">
-      <h2 class="font-fredoka text-2xl sm:text-3xl font-bold mb-6">
-        The latest. <span class="text-pastel-subtle">Take a look at what's new.</span>
-      </h2>
-
-      <!-- Horizontal Scrollable Cards -->
-      <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
-        
-        <!-- Large Apple Hero Card 1 -->
-        <div class="min-w-[300px] sm:min-w-[380px] bg-white rounded-3xl p-8 flex flex-col justify-between apple-card-shadow border border-gray-100 relative overflow-hidden h-[450px]">
-          <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-pastel-subtle">NEW</span>
-            <h3 class="font-fredoka text-2xl font-bold mt-1">Pastel Cloud Gummies</h3>
-            <p class="text-gray-500 text-sm mt-1">Light, fluffy marshmallow bites infused with natural peach blossom.</p>
-          </div>
-          <div class="my-auto text-center text-8xl py-6 bg-gradient-to-tr from-pastel-pink/20 to-pastel-mint/20 rounded-2xl">
-            🌸
-          </div>
-          <div class="flex justify-between items-end">
-            <div>
-              <p class="text-xs text-pastel-subtle">From</p>
-              <p class="font-semibold text-lg">$6.50</p>
+          <div class="flex items-center gap-3 text-xs font-medium">
+            <div class="flex -space-x-2">
+              <span class="w-8 h-8 rounded-full bg-pastel-pink border-2 border-white flex items-center justify-center">🍬</span>
+              <span class="w-8 h-8 rounded-full bg-pastel-mint border-2 border-white flex items-center justify-center">🍭</span>
             </div>
-            <button class="bg-pastel-dark text-white font-medium text-xs px-5 py-2.5 rounded-full hover:bg-black transition">
-              Buy
+            <div>
+              <p class="text-pastel-dark font-semibold">Need tasting advice?</p>
+              <a href="#" class="text-blue-600 hover:underline">Chat with a Sweet Specialist →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Category Shortcuts -->
+        <div class="flex items-center gap-8 overflow-x-auto hide-scrollbar py-4 border-b border-gray-200/60">
+          <button onclick="switchTab('gummies')" class="flex flex-col items-center min-w-[70px] text-center group">
+            <div class="w-14 h-14 rounded-full bg-pastel-pink/30 group-hover:bg-pastel-pink flex items-center justify-center text-2xl transition mb-2">🍬</div>
+            <span class="text-xs font-medium text-pastel-dark">Gummies</span>
+          </button>
+          <button onclick="switchTab('chocolates')" class="flex flex-col items-center min-w-[70px] text-center group">
+            <div class="w-14 h-14 rounded-full bg-pastel-mint/30 group-hover:bg-pastel-mint flex items-center justify-center text-2xl transition mb-2">🍫</div>
+            <span class="text-xs font-medium text-pastel-dark">Chocolates</span>
+          </button>
+          <button onclick="switchTab('sours')" class="flex flex-col items-center min-w-[70px] text-center group">
+            <div class="w-14 h-14 rounded-full bg-pastel-blue/30 group-hover:bg-pastel-blue flex items-center justify-center text-2xl transition mb-2">🍋</div>
+            <span class="text-xs font-medium text-pastel-dark">Sours</span>
+          </button>
+          <button onclick="switchTab('mix')" class="flex flex-col items-center min-w-[70px] text-center group">
+            <div class="w-14 h-14 rounded-full bg-pastel-lilac/50 group-hover:bg-pastel-lilac flex items-center justify-center text-2xl transition mb-2">📦</div>
+            <span class="text-xs font-medium text-pastel-dark">Mix Box</span>
+          </button>
+          <button onclick="switchTab('gifting')" class="flex flex-col items-center min-w-[70px] text-center group">
+            <div class="w-14 h-14 rounded-full bg-amber-100 group-hover:bg-amber-200 flex items-center justify-center text-2xl transition mb-2">🎁</div>
+            <span class="text-xs font-medium text-pastel-dark">Gift Sets</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Featured Carousel -->
+      <section class="mb-16">
+        <h2 class="font-fredoka text-2xl sm:text-3xl font-bold mb-6">
+          The latest. <span class="text-pastel-subtle">Take a look at what's new.</span>
+        </h2>
+        <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-6">
+          <div class="min-w-[300px] sm:min-w-[360px] bg-white rounded-3xl p-8 flex flex-col justify-between apple-card-shadow border border-gray-100 h-[420px]">
+            <div>
+              <span class="text-[11px] font-bold uppercase text-pastel-subtle">NEW RELEASE</span>
+              <h3 class="font-fredoka text-2xl font-bold mt-1">Pastel Cloud Gummies</h3>
+              <p class="text-gray-500 text-sm mt-1">Light, fluffy marshmallow bites with peach blossom extract.</p>
+            </div>
+            <div class="my-auto text-center text-7xl py-6 bg-pastel-pink/20 rounded-2xl">🌸</div>
+            <div class="flex justify-between items-end">
+              <div><p class="text-xs text-pastel-subtle">Pouch 200g</p><p class="font-semibold text-lg">$6.50</p></div>
+              <button onclick="addToCart()" class="bg-pastel-dark text-white text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-black transition">Add to Cart</button>
+            </div>
+          </div>
+
+          <div class="min-w-[300px] sm:min-w-[360px] bg-pastel-pink/20 rounded-3xl p-8 flex flex-col justify-between apple-card-shadow border border-pastel-pink/30 h-[420px]">
+            <div>
+              <span class="text-[11px] font-bold uppercase text-rose-600">BESTSELLER</span>
+              <h3 class="font-fredoka text-2xl font-bold mt-1">Sour Lemon Drop</h3>
+              <p class="text-gray-600 text-sm mt-1">Organic zesty lemons with sparkling sour crystal sugar.</p>
+            </div>
+            <div class="my-auto text-center text-7xl py-6">🍋</div>
+            <div class="flex justify-between items-end">
+              <div><p class="text-xs text-pastel-subtle">Pouch 250g</p><p class="font-semibold text-lg">$5.20</p></div>
+              <button onclick="addToCart()" class="bg-pastel-dark text-white text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-black transition">Add to Cart</button>
+            </div>
+          </div>
+
+          <div class="min-w-[300px] sm:min-w-[360px] bg-pastel-mint/20 rounded-3xl p-8 flex flex-col justify-between apple-card-shadow border border-pastel-mint/30 h-[420px]">
+            <div>
+              <span class="text-[11px] font-bold uppercase text-emerald-700">VEGAN & GLUTEN-FREE</span>
+              <h3 class="font-fredoka text-2xl font-bold mt-1">Mint Choco Buttons</h3>
+              <p class="text-gray-600 text-sm mt-1">70% Dark cocoa drops with natural spearmint leaf.</p>
+            </div>
+            <div class="my-auto text-center text-7xl py-6">🍫</div>
+            <div class="flex justify-between items-end">
+              <div><p class="text-xs text-pastel-subtle">Tin 180g</p><p class="font-semibold text-lg">$7.00</p></div>
+              <button onclick="addToCart()" class="bg-pastel-dark text-white text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-black transition">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- 2. GUMMIES PAGE VIEW                              -->
+    <!-- ================================================= -->
+    <div id="page-gummies" class="page-section">
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-wider text-rose-500">CATEGORY</span>
+        <h1 class="font-fredoka font-bold text-4xl text-pastel-dark">Gummies Collection</h1>
+        <p class="text-pastel-subtle text-sm mt-1">Hand-poured gummies made with real fruit juices and soft pastel finishes.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-pink/30 rounded-2xl p-8 text-center text-6xl mb-4">🐻</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-pink px-2.5 py-1 rounded-full">Organic Juice</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Pastel Bear Gummies</h3>
+            <p class="text-xs text-gray-500 mt-1">Peach, elderflower, and strawberry wild bear bites.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$5.80</span>
+            <button onclick="addToCart()" class="bg-pastel-mint text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-lilac/40 rounded-2xl p-8 text-center text-6xl mb-4">🍑</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-lilac px-2.5 py-1 rounded-full">Vegan</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Peach Blossom Hearts</h3>
+            <p class="text-xs text-gray-500 mt-1">Dusted in delicate sugar, chewable soft heart gummies.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$6.20</span>
+            <button onclick="addToCart()" class="bg-pastel-mint text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-blue/30 rounded-2xl p-8 text-center text-6xl mb-4">🍇</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-blue px-2.5 py-1 rounded-full">No Artificial Colors</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Lavender Grape Dews</h3>
+            <p class="text-xs text-gray-500 mt-1">Calming lavender botanical essence infused with Concord grape.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$6.50</span>
+            <button onclick="addToCart()" class="bg-pastel-mint text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- 3. CHOCOLATES PAGE VIEW                           -->
+    <!-- ================================================= -->
+    <div id="page-chocolates" class="page-section">
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">CATEGORY</span>
+        <h1 class="font-fredoka font-bold text-4xl text-pastel-dark">Artisanal Chocolates</h1>
+        <p class="text-pastel-subtle text-sm mt-1">Ethically sourced cacao blended with creamy pastel undertones.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-mint/30 rounded-2xl p-8 text-center text-6xl mb-4">🍫</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-mint px-2.5 py-1 rounded-full">70% Dark</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Mint Chocolate Buttons</h3>
+            <p class="text-xs text-gray-500 mt-1">Crisp chocolate wafers infused with fresh spearmint.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$7.00</span>
+            <button onclick="addToCart()" class="bg-pastel-pink text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-pink/30 rounded-2xl p-8 text-center text-6xl mb-4">🍓</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-pink px-2.5 py-1 rounded-full">Ruby Cocoa</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Ruby Strawberry Bark</h3>
+            <p class="text-xs text-gray-500 mt-1">Naturally pink ruby chocolate with freeze-dried strawberry slices.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$8.50</span>
+            <button onclick="addToCart()" class="bg-pastel-pink text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-blue/30 rounded-2xl p-8 text-center text-6xl mb-4">🧂</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-blue px-2.5 py-1 rounded-full">Sea Salt</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Sea Salt Caramel Pearls</h3>
+            <p class="text-xs text-gray-500 mt-1">Caramel coated in milk chocolate and dusted with Maldon salt.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$7.80</span>
+            <button onclick="addToCart()" class="bg-pastel-pink text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- 4. SOURS PAGE VIEW                                -->
+    <!-- ================================================= -->
+    <div id="page-sours" class="page-section">
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-600">CATEGORY</span>
+        <h1 class="font-fredoka font-bold text-4xl text-pastel-dark">Sour Sweets</h1>
+        <p class="text-pastel-subtle text-sm mt-1">Tangy, zesty, and electric flavor hits balanced with soft pastel hues.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-amber-100 rounded-2xl p-8 text-center text-6xl mb-4">🍋</div>
+          <div>
+            <span class="text-[10px] font-bold bg-amber-200 px-2.5 py-1 rounded-full">Extra Tangy</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Sour Lemon Drops</h3>
+            <p class="text-xs text-gray-500 mt-1">Zesty organic lemons with a sparkling citric sugar coating.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$5.20</span>
+            <button onclick="addToCart()" class="bg-pastel-blue text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-pink/30 rounded-2xl p-8 text-center text-6xl mb-4">🍉</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-pink px-2.5 py-1 rounded-full">Fruity Acid</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Sour Watermelon Belts</h3>
+            <p class="text-xs text-gray-500 mt-1">Chewy ribbon belts coated in mouth-watering sour dust.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$5.50</span>
+            <button onclick="addToCart()" class="bg-pastel-blue text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-mint/30 rounded-2xl p-8 text-center text-6xl mb-4">🍏</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-mint px-2.5 py-1 rounded-full">Sour Level 3</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Sour Apple Rings</h3>
+            <p class="text-xs text-gray-500 mt-1">Granny Smith apple rings with punchy sour coating.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$5.00</span>
+            <button onclick="addToCart()" class="bg-pastel-blue text-pastel-dark font-semibold text-xs px-4 py-2 rounded-full hover:brightness-95">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- 5. MIX & MATCH BUILDER PAGE VIEW                  -->
+    <!-- ================================================= -->
+    <div id="page-mix" class="page-section">
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">INTERACTIVE BUILDER</span>
+        <h1 class="font-fredoka font-bold text-4xl text-pastel-dark">Custom Candy Bag Studio</h1>
+        <p class="text-pastel-subtle text-sm mt-1">Pick your bag size, scoop your favorites, and print a custom label.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Step 1: Candy Selection Grid -->
+        <div class="lg:col-span-2 space-y-6">
+          <div class="bg-white p-6 rounded-3xl apple-card-shadow border border-gray-100">
+            <h3 class="font-fredoka font-bold text-lg mb-4">Select Candy Scoops</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <button onclick="addScoop('Pastel Bear Gummies')" class="p-4 rounded-2xl border border-gray-200 hover:border-pastel-pink text-center group transition">
+                <div class="text-4xl mb-1 group-hover:scale-110 transition">🐻</div>
+                <div class="font-bold text-xs">Pastel Bear Gummies</div>
+                <span class="text-[10px] text-gray-400">+ Add Scoop</span>
+              </button>
+              <button onclick="addScoop('Sour Lemon Drop')" class="p-4 rounded-2xl border border-gray-200 hover:border-pastel-mint text-center group transition">
+                <div class="text-4xl mb-1 group-hover:scale-110 transition">🍋</div>
+                <div class="font-bold text-xs">Sour Lemon Drop</div>
+                <span class="text-[10px] text-gray-400">+ Add Scoop</span>
+              </button>
+              <button onclick="addScoop('Mint Choco Buttons')" class="p-4 rounded-2xl border border-gray-200 hover:border-pastel-blue text-center group transition">
+                <div class="text-4xl mb-1 group-hover:scale-110 transition">🍫</div>
+                <div class="font-bold text-xs">Mint Choco Buttons</div>
+                <span class="text-[10px] text-gray-400">+ Add Scoop</span>
+              </button>
+              <button onclick="addScoop('Peach Hearts')" class="p-4 rounded-2xl border border-gray-200 hover:border-pastel-lilac text-center group transition">
+                <div class="text-4xl mb-1 group-hover:scale-110 transition">🍑</div>
+                <div class="font-bold text-xs">Peach Hearts</div>
+                <span class="text-[10px] text-gray-400">+ Add Scoop</span>
+              </button>
+              <button onclick="addScoop('Watermelon Belts')" class="p-4 rounded-2xl border border-gray-200 hover:border-pastel-pink text-center group transition">
+                <div class="text-4xl mb-1 group-hover:scale-110 transition">🍉</div>
+                <div class="font-bold text-xs">Watermelon Belts</div>
+                <span class="text-[10px] text-gray-400">+ Add Scoop</span>
+              </button>
+              <button onclick="addScoop('Lavender Grape Dews')" class="p-4 rounded-2xl border border-gray-200 hover:border-pastel-blue text-center group transition">
+                <div class="text-4xl mb-1 group-hover:scale-110 transition">🍇</div>
+                <div class="font-bold text-xs">Lavender Dews</div>
+                <span class="text-[10px] text-gray-400">+ Add Scoop</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Live Bag Summary Panel -->
+        <div class="bg-pastel-cream p-6 rounded-3xl border border-gray-200 flex flex-col justify-between h-full">
+          <div>
+            <h3 class="font-fredoka font-bold text-xl mb-2">Your Custom Pouch</h3>
+            <p class="text-xs text-gray-500 mb-4">500g Eco Pouch ($14.99 base)</p>
+            
+            <div class="mb-6">
+              <label class="block text-xs font-semibold mb-1">Custom Label Text (Free Engraving):</label>
+              <input type="text" id="custom-label" placeholder="e.g. For Alex with Love" class="w-full text-xs p-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pastel-pink">
+            </div>
+
+            <div class="border-t border-gray-200 pt-4">
+              <h4 class="font-bold text-xs uppercase text-gray-400 mb-2">Selected Scoops (<span id="scoop-count">0</span>):</h4>
+              <ul id="scoop-list" class="text-xs space-y-1 text-gray-600">
+                <li class="italic text-gray-400">Click candies on the left to add scoops...</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-8 border-t border-gray-200 pt-4">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-bold text-sm">Total Price:</span>
+              <span class="font-fredoka font-bold text-2xl text-pastel-dark" id="bag-total">$14.99</span>
+            </div>
+            <button onclick="addCustomBagToCart()" class="w-full bg-pastel-mint text-pastel-dark font-fredoka font-bold py-3 rounded-full hover:brightness-95 transition">
+              Add Custom Bag to Order
             </button>
           </div>
         </div>
-
-        <!-- Large Apple Hero Card 2 -->
-        <div class="min-w-[300px] sm:min-w-[380px] bg-pastel-pink/20 rounded-3xl p-8 flex flex-col justify-between apple-card-shadow border border-pastel-pink/30 relative overflow-hidden h-[450px]">
-          <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-600">LIMITED EDITION</span>
-            <h3 class="font-fredoka text-2xl font-bold mt-1">Sour Lemon Drop</h3>
-            <p class="text-gray-600 text-sm mt-1">Zesty organic lemons with a sparkling pastel sugar coating.</p>
-          </div>
-          <div class="my-auto text-center text-8xl py-6">
-            🍋
-          </div>
-          <div class="flex justify-between items-end">
-            <div>
-              <p class="text-xs text-pastel-subtle">From</p>
-              <p class="font-semibold text-lg">$5.20</p>
-            </div>
-            <button class="bg-pastel-dark text-white font-medium text-xs px-5 py-2.5 rounded-full hover:bg-black transition">
-              Buy
-            </button>
-          </div>
-        </div>
-
-        <!-- Large Apple Hero Card 3 -->
-        <div class="min-w-[300px] sm:min-w-[380px] bg-pastel-mint/20 rounded-3xl p-8 flex flex-col justify-between apple-card-shadow border border-pastel-mint/30 relative overflow-hidden h-[450px]">
-          <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">VEGAN & GLUTEN-FREE</span>
-            <h3 class="font-fredoka text-2xl font-bold mt-1">Mint Choco Buttons</h3>
-            <p class="text-gray-600 text-sm mt-1">70% Dark cocoa drops infused with natural spearmint leaf.</p>
-          </div>
-          <div class="my-auto text-center text-8xl py-6">
-            🍫
-          </div>
-          <div class="flex justify-between items-end">
-            <div>
-              <p class="text-xs text-pastel-subtle">From</p>
-              <p class="font-semibold text-lg">$7.00</p>
-            </div>
-            <button class="bg-pastel-dark text-white font-medium text-xs px-5 py-2.5 rounded-full hover:bg-black transition">
-              Buy
-            </button>
-          </div>
-        </div>
-
       </div>
-    </section>
+    </div>
 
-    <!-- Apple-Style "Customizer Box" Section -->
-    <section id="mix" class="mb-16 bg-white rounded-3xl p-8 sm:p-12 apple-card-shadow border border-gray-100">
-      <div class="max-w-3xl">
-        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">SWEET BUILDER</span>
-        <h2 class="font-fredoka text-3xl sm:text-4xl font-bold mt-1">Build Your Custom Candy Bag</h2>
-        <p class="text-gray-500 text-sm sm:text-base mt-2">Pick your favorite flavors and customize your bag label for free.</p>
+    <!-- ================================================= -->
+    <!-- 6. GIFTING PAGE VIEW                              -->
+    <!-- ================================================= -->
+    <div id="page-gifting" class="page-section">
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">GIFTING STUDIO</span>
+        <h1 class="font-fredoka font-bold text-4xl text-pastel-dark">Gifting & Luxury Sets</h1>
+        <p class="text-pastel-subtle text-sm mt-1">Pre-curated pastel gift boxes with satin ribbons and personalized cards.</p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6 mt-8">
-        <div class="bg-pastel-cream p-6 rounded-2xl border border-gray-200 text-center">
-          <div class="text-4xl mb-3">1️⃣</div>
-          <h4 class="font-fredoka font-bold text-base">Select Bag Size</h4>
-          <p class="text-xs text-gray-500 mt-1">Choose between 250g, 500g or 1kg pouches.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-pink/30 rounded-2xl p-8 text-center text-7xl mb-4">🎁</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-pink px-2.5 py-1 rounded-full">POPULAR</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Pastel Celebration Box</h3>
+            <p class="text-xs text-gray-500 mt-1">Includes 6 best-selling gummies, chocolates, and sour pouches in a luxury gift box.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$38.00</span>
+            <button onclick="addToCart()" class="bg-pastel-dark text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-black">Order Box</button>
+          </div>
         </div>
-        <div class="bg-pastel-cream p-6 rounded-2xl border border-gray-200 text-center">
-          <div class="text-4xl mb-3">2️⃣</div>
-          <h4 class="font-fredoka font-bold text-base">Scoop Sweets</h4>
-          <p class="text-xs text-gray-500 mt-1">Mix up to 6 different varieties from our daily batch.</p>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-mint/30 rounded-2xl p-8 text-center text-6xl mb-4">🥂</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-mint px-2.5 py-1 rounded-full">WEDDINGS & EVENTS</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Mini Favor Jars (Set of 10)</h3>
+            <p class="text-xs text-gray-500 mt-1">Glass jars topped with pastel ribbon ties. Perfect for wedding or party favors.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">$45.00</span>
+            <button onclick="addToCart()" class="bg-pastel-dark text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-black">Order Jars</button>
+          </div>
         </div>
-        <div class="bg-pastel-cream p-6 rounded-2xl border border-gray-200 text-center">
-          <div class="text-4xl mb-3">3️⃣</div>
-          <h4 class="font-fredoka font-bold text-base">Free Custom Message</h4>
-          <p class="text-xs text-gray-500 mt-1">Print a personalized name or gift message on the label.</p>
+
+        <div class="bg-white rounded-3xl p-6 apple-card-shadow border border-gray-100 flex flex-col justify-between">
+          <div class="bg-pastel-blue/30 rounded-2xl p-8 text-center text-6xl mb-4">💌</div>
+          <div>
+            <span class="text-[10px] font-bold bg-pastel-blue px-2.5 py-1 rounded-full">DIGITAL GIFT CARD</span>
+            <h3 class="font-fredoka font-bold text-xl mt-2">Sweet Wonders Gift Card</h3>
+            <p class="text-xs text-gray-500 mt-1">Delivered instantly via email with a custom message.</p>
+          </div>
+          <div class="flex justify-between items-center mt-6">
+            <span class="font-bold text-lg">From $25.00</span>
+            <button onclick="addToCart()" class="bg-pastel-dark text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-black">Buy Card</button>
+          </div>
         </div>
       </div>
-
-      <div class="mt-8 text-center sm:text-right">
-        <button class="bg-pastel-mint text-pastel-dark font-fredoka font-bold px-8 py-3.5 rounded-full hover:brightness-95 transition text-sm">
-          Start Customizing Bag →
-        </button>
-      </div>
-    </section>
-
-    <!-- Apple Store Difference (Services Grid) -->
-    <section class="mb-16">
-      <h2 class="font-fredoka text-2xl sm:text-3xl font-bold mb-6">
-        The Sweet Store difference. <span class="text-pastel-subtle">Even more reasons to shop with us.</span>
-      </h2>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <div class="bg-white p-6 rounded-3xl apple-card-shadow border border-gray-100 flex flex-col justify-between h-48">
-          <div class="text-3xl">🚚</div>
-          <div>
-            <h4 class="font-fredoka font-bold text-base">Free Express Delivery</h4>
-            <p class="text-xs text-gray-500 mt-1">Enjoy complimentary climate-controlled shipping on orders over $35.</p>
-          </div>
-        </div>
-
-        <div class="bg-white p-6 rounded-3xl apple-card-shadow border border-gray-100 flex flex-col justify-between h-48">
-          <div class="text-3xl">🏷️</div>
-          <div>
-            <h4 class="font-fredoka font-bold text-base">Free Custom Engraving</h4>
-            <p class="text-xs text-gray-500 mt-1">Personalize gift jars and boxes with names or short messages.</p>
-          </div>
-        </div>
-
-        <div class="bg-white p-6 rounded-3xl apple-card-shadow border border-gray-100 flex flex-col justify-between h-48">
-          <div class="text-3xl">🌱</div>
-          <div>
-            <h4 class="font-fredoka font-bold text-base">100% Eco Packaging</h4>
-            <p class="text-xs text-gray-500 mt-1">All our bags and pouches are fully compostable and recyclable.</p>
-          </div>
-        </div>
-
-        <div class="bg-white p-6 rounded-3xl apple-card-shadow border border-gray-100 flex flex-col justify-between h-48">
-          <div class="text-3xl">💬</div>
-          <div>
-            <h4 class="font-fredoka font-bold text-base">Sweet Tasting Advice</h4>
-            <p class="text-xs text-gray-500 mt-1">Chat live with our candy specialists for event recommendations.</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
+    </div>
 
   </main>
 
@@ -304,6 +492,70 @@
       </div>
     </div>
   </footer>
+
+  <!-- Page Navigation & Interactive Cart JavaScript -->
+  <script>
+    let cartCount = 0;
+    let selectedScoops = [];
+
+    // Switch between page views
+    function switchTab(tabId) {
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+
+      document.getElementById('page-' + tabId).classList.add('active');
+      const activeNavTab = document.getElementById('tab-' + tabId);
+      if (activeNavTab) activeNavTab.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Cart Counter
+    function addToCart() {
+      cartCount++;
+      document.getElementById('cart-count').innerText = cartCount;
+      alert('Item added to your bag!');
+    }
+
+    // Mix & Match Builder Logic
+    function addScoop(candyName) {
+      selectedScoops.push(candyName);
+      updateScoopUI();
+    }
+
+    function updateScoopUI() {
+      const scoopList = document.getElementById('scoop-list');
+      document.getElementById('scoop-count').innerText = selectedScoops.length;
+      
+      if (selectedScoops.length === 0) {
+        scoopList.innerHTML = '<li class="italic text-gray-400">Click candies on the left to add scoops...</li>';
+        return;
+      }
+
+      scoopList.innerHTML = selectedScoops.map((item, index) => 
+        `<li class="flex justify-between items-center">
+          <span>• ${item}</span>
+          <button onclick="removeScoop(${index})" class="text-rose-500 hover:underline text-[10px]">Remove</button>
+        </li>`
+      ).join('');
+    }
+
+    function removeScoop(index) {
+      selectedScoops.splice(index, 1);
+      updateScoopUI();
+    }
+
+    function addCustomBagToCart() {
+      if (selectedScoops.length === 0) {
+        alert('Please select at least one scoop for your custom bag!');
+        return;
+      }
+      addToCart();
+      selectedScoops = [];
+      document.getElementById('custom-label').value = '';
+      updateScoopUI();
+    }
+  </script>
 
 </body>
 </html>
